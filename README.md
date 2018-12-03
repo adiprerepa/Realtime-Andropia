@@ -31,4 +31,4 @@ Things to add :
       - Verification packets sent every n seconds to determine connection status 
           (when a player disconnects, server does not receive packets)
      
-Aditya Prerepa 12-2-18
+Aditya Prerepa & Akshay Trivedi 12-2-18
