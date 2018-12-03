@@ -2,7 +2,7 @@
 
 
 Overview : 
-  This project's purpose is to make a real time game where 2 players (beta) can play a game (designed by Akshay) together 
+  This project's purpose is to make a real time game where 2 players (beta) can play a game together 
   on a 2 dimensional map. The connections are established through UDP connections, where the server does not need to send a 
   confirmation packet, and thus, the connections are simpler (and maybe faster). The map is stored as a set of rectangle 
   postitions on the server, and whenever a client presses the W, A, S, or D keys, it modifies the x and y coordinates which 
