@@ -28,10 +28,13 @@ public class Main {
 
         int xPlayer1 = 100;
         int yPlayer1 = 400;
-        int xPlayer2 = 100; //Ask Akshay and change
+        int xPlayer2 = 1180; //Ask Akshay and change
         int yPlayer2 = 400;
         DatagramPacket recievePacket;
-        byte[] sendData = new byte[256];
+        //DatagramPacket initPacket1;
+        byte[] sendDataPlayer1 = new byte[256];
+        byte[] sendDataPlayer2 = new byte[256];
+        
         byte[] recieveData = new byte[1024];
         prev = System.currentTimeMillis();
 
@@ -100,12 +103,13 @@ public class Main {
             if (((CreateThread) myThread).dStatusPlayer2) {
                 xPlayer2++;
             }
-
-            String sendDataNotBytes = "0 0 " +  xPlayer1 + " " + yPlayer1 + " 128 128 2" + " 0 0 " + xPlayer2 + " " + yPlayer2 + " 128 128 2";
-            sendData = sendDataNotBytes.getBytes();
-            sendPacketPlayer1 = new DatagramPacket(sendData, sendData.length, IPAddrPlayer1, portNumberPlayer1);
-            sendPacketPlayer2 = new DatagramPacket(sendData, sendData.length, IPAddrPlayer2, portNumberPlayer2);
-            System.out.println("sending " + sendDataNotBytes);
+            String sendDataNotBytesPlayer2 = "1 0 " + xPlayer2 + " " + yPlayer2 + " 32 32 2";
+            String sendDataNotBytesPlayer1 = "0 0 " + xPlayer1 + " " + yPlayer1 + " 128 128 2";
+            sendDataPlayer1 = sendDataNotBytesPlayer1.getBytes();
+            sendDataPlayer2 = sendDataNotBytesPlayer2.getBytes();
+            sendPacketPlayer1 = new DatagramPacket(sendDataPlayer1, sendDataPlayer1.length, IPAddrPlayer1, portNumberPlayer1);
+            sendPacketPlayer2 = new DatagramPacket(sendDataPlayer2, sendDataPlayer2.length, IPAddrPlayer2, portNumberPlayer2);
+            //System.out.println("sending " + sendDataNotBytes);
 
 
             try {
@@ -123,8 +127,8 @@ public class Main {
             //bug, comment the next 3 lines and uncomment the same three lines
             //at the bottom.
 
-            //Cap the framerate of the stuff being printed and processed on the screen.
-            //The parameter is the fps.
+            //Cap the framerate of the updates.
+            //The parameter is the milliseconds per frame.
             crapFrameRate(16);
         }
     }
@@ -315,13 +319,14 @@ public class Main {
             catch (Exception e) {
                 e.printStackTrace();
             }
+            
             /*
              * Data is sent back here using another DatagramPacket class, and is sent
              * back to the given IP and port. The data sent is the values of x and y, which
              * are incremented/decremented based on keypresses. The string is converted to bytes,
              * which is then sent using the send api.
              */
+            
         }
-
     }
 }
