@@ -27,6 +27,22 @@ Texture::~Texture()
 	tex = nullptr;
 }
 
+void Texture::render(SDL_Point pos, bool centered)
+{
+	Render::blit(tex, { pos.x, pos.y, size.x, size.y }, centered);
+}
+
+void Texture::render(SDL_Point pos, double theta, bool centered)
+{
+	Render::blitEx(tex, { pos.x, pos.y, size.x, size.y }, theta, { pos.x + size.x / 2, pos.y + size.y / 2 }, centered);
+}
+
+
+void Texture::render(SDL_Point pos, SDL_Point spincenter, double theta, bool centered)
+{
+	Render::blitEx(tex, { pos.x, pos.y, size.x, size.y }, theta, spincenter, centered);
+}
+
 void Texture::load(std::string filename)
 {
 	SDL_Surface * temp = IMG_Load(filename.c_str());
@@ -41,7 +57,7 @@ void Texture::load(std::string filename)
 void Texture::loadpart(std::string filename, SDL_Rect part)
 {
 	SDL_Surface * uncropped = IMG_Load(filename.c_str());
-	SDL_Surface * temp =  SDL_CreateRGBSurface(uncropped->flags, part.w, part.h, uncropped->format->BitsPerPixel, uncropped->format->Rmask, uncropped->format->Gmask, uncropped->format->Bmask, uncropped->format->Amask);
+	SDL_Surface * temp = SDL_CreateRGBSurface(uncropped->flags, part.w, part.h, uncropped->format->BitsPerPixel, uncropped->format->Rmask, uncropped->format->Gmask, uncropped->format->Bmask, uncropped->format->Amask);
 	SDL_BlitSurface(uncropped, &part, temp, nullptr);
 
 	tex = Render::createTextureFromSurface(temp);
@@ -51,37 +67,7 @@ void Texture::loadpart(std::string filename, SDL_Rect part)
 	SDL_QueryTexture(tex, nullptr, nullptr, &size.x, &size.y);
 }
 
-void Texture::render(SDL_Point pos)
-{
-	Render::blit(tex, { pos.x, pos.y, size.x, size.y });
-}
-
-void Texture::render(SDL_Point pos, double theta)
-{
-	Render::blitEx(tex, { pos.x, pos.y, size.x, size.y }, theta, { pos.x + size.x / 2, pos.y + size.y / 2 });
-}
-
-
-void Texture::render(SDL_Point pos, SDL_Point spincenter, double theta)
-{
-	Render::blitEx(tex, { pos.x, pos.y, size.x, size.y }, theta, spincenter);
-}
-
 std::vector<std::pair<texID, Texture*>> textures;
-
-void TextureManager::load(texID ID, std::string filename)
-{
-	Texture * tex = new Texture();
-	tex->load(filename);
-	textures.push_back({ ID, tex });
-}
-
-void TextureManager::loadpart(texID ID, std::string filename, SDL_Rect part)
-{
-	Texture * tex = new Texture();
-	tex->loadpart(filename, part);
-	textures.push_back({ ID, tex });
-}
 
 void TextureManager::init()
 {
@@ -109,19 +95,19 @@ Texture * TextureManager::find(texID ID)
 	return nullptr;
 }
 
-void TextureManager::render(texID ID, SDL_Point pos)
+void TextureManager::render(texID ID, SDL_Point pos, bool centered)
 {
-	find(ID)->render(pos);
+	find(ID)->render(pos, centered);
 }
 
-void TextureManager::render(texID ID, SDL_Point pos, double theta)
+void TextureManager::render(texID ID, SDL_Point pos, double theta, bool centered)
 {
-	find(ID)->render(pos, theta);
+	find(ID)->render(pos, theta, centered);
 }
 
-void TextureManager::render(texID ID, SDL_Point pos, SDL_Point spincenter, double theta)
+void TextureManager::render(texID ID, SDL_Point pos, SDL_Point spincenter, double theta, bool centered)
 {
-	find(ID)->render(pos, spincenter, theta);
+	find(ID)->render(pos, spincenter, theta, centered);
 }
 
 extern SDL_Renderer * WINDOW_RENDERER;
@@ -134,5 +120,19 @@ void TextureManager::makeWord(texID ID, std::string text, std::string fontPath, 
 
 	Texture * tex = new Texture(Render::createTextureFromSurface(surfaceMessage));
 
+	textures.push_back({ ID, tex });
+}
+
+void TextureManager::load(texID ID, std::string filename)
+{
+	Texture * tex = new Texture();
+	tex->load(filename);
+	textures.push_back({ ID, tex });
+}
+
+void TextureManager::loadpart(texID ID, std::string filename, SDL_Rect part)
+{
+	Texture * tex = new Texture();
+	tex->loadpart(filename, part);
 	textures.push_back({ ID, tex });
 }

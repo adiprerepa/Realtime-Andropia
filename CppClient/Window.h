@@ -21,9 +21,9 @@ namespace Render
 {
 	SDL_Texture * createTextureFromSurface(SDL_Surface * surface);
 
-	void drawRect(SDL_Rect rect, Color color);
+	void drawRect(SDL_Rect rect, Color color, bool centered);
 
-	void blit(SDL_Texture * tex, SDL_Rect rect);
+	void blit(SDL_Texture * tex, SDL_Rect rect, bool centered);
 
-	void blitEx(SDL_Texture * tex, SDL_Rect rect, double angle, SDL_Point spincenter);
+	void blitEx(SDL_Texture * tex, SDL_Rect rect, double angle, SDL_Point spincenter, bool centered);
 };

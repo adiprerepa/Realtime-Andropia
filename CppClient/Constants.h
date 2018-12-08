@@ -14,7 +14,6 @@ const int SCREEN_HEIGHT = 800;
 #define WALLCOLOR {100, 100, 100, 255}
 
 // UDP
-//const char serverIP[] = "54.215.224.36";
 const char serverIP[] = "192.168.1.12";
 const int serverPort = 55555;
 const int recvbufsiz = 1024;

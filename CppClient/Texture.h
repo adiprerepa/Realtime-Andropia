@@ -26,12 +26,12 @@ public:
 	Texture(SDL_Texture * tex);
 	~Texture();
 
+	void render(SDL_Point pos, bool centered);
+	void render(SDL_Point pos, double theta, bool centered);
+	void render(SDL_Point pos, SDL_Point spincenter, double theta, bool centered);
+
 	void load(std::string filename);
 	void loadpart(std::string filename, SDL_Rect part);
-
-	void render(SDL_Point pos);
-	void render(SDL_Point pos, double theta);
-	void render(SDL_Point pos, SDL_Point spincenter, double theta);
 
 	friend TextureManager;
 };
@@ -44,12 +44,12 @@ public:
 
 	static Texture * find(texID ID);
 
-	static void render(texID ID, SDL_Point pos);
-	static void render(texID ID, SDL_Point pos, double theta);
-	static void render(texID ID, SDL_Point pos, SDL_Point spincenter, double theta);
-
-	static void makeWord(texID ID, std::string text, std::string fontPath, int fontSize, Color forecolor, Color backcolor);
+	static void render(texID ID, SDL_Point pos, bool centered);
+	static void render(texID ID, SDL_Point pos, double theta, bool centered);
+	static void render(texID ID, SDL_Point pos, SDL_Point spincenter, double theta, bool centered);
 
 	static void load(texID ID, std::string filename);
 	static void loadpart(texID ID, std::string filename, SDL_Rect part);
+
+	static void makeWord(texID ID, std::string text, std::string fontPath, int fontSize, Color forecolor, Color backcolor);
 };

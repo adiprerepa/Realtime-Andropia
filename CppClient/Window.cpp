@@ -23,22 +23,22 @@ SDL_Texture * Render::createTextureFromSurface(SDL_Surface * surface)
 	return t;
 }
 
-void Render::drawRect(SDL_Rect rect, Color color)
+void Render::drawRect(SDL_Rect rect, Color color, bool centered)
 {
 	SDL_SetRenderDrawColor(WINDOW_RENDERER, color.r, color.g, color.b, color.a);
-	center(rect);
+	if (centered) center(rect);
 	SDL_RenderFillRect(WINDOW_RENDERER, &rect);
 }
 
-void Render::blit(SDL_Texture * tex, SDL_Rect rect)
+void Render::blit(SDL_Texture * tex, SDL_Rect rect, bool centered)
 {
-	center(rect);
+	if (centered) center(rect);
 	SDL_RenderCopy(WINDOW_RENDERER, tex, nullptr, &rect);
 }
 
-void Render::blitEx(SDL_Texture * tex, SDL_Rect rect, double angle, SDL_Point spincenter)
+void Render::blitEx(SDL_Texture * tex, SDL_Rect rect, double angle, SDL_Point spincenter, bool centered)
 {
-	center(rect);
+	if (centered) center(rect);
 	SDL_RenderCopyEx(WINDOW_RENDERER, tex, nullptr, &rect, angle, &spincenter, SDL_FLIP_NONE);
 }
 

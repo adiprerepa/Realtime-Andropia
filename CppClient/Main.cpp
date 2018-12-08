@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "UDP.h"
 #include "Window.h"
+#include <WinSock2.h>
 
 #pragma comment(lib,"ws2_32.lib")
 #pragma comment (lib, "SDL2/SDL2.lib")
@@ -23,8 +24,14 @@ int main()
 	TextureManager::init();
 	UDP::init(&state);
 
+	int i = 0;
+
 	while (!Input::closed)
 	{
+		i++;
+
+		printf("%i\n", i);
+
 		Input::update();
 
 		state.draw();
@@ -62,10 +69,6 @@ int main()
 		if (Input::Key::keyrelease[KEY_D])
 		{
 			UDP::send("ku d");
-		}
-		if (Input::Mouse::leftclicked)
-		{
-			UDP::send("mc " + std::to_string(Input::Mouse::pos.x) + " " + std::to_string(Input::Mouse::pos.y));
 		}
 		if (Input::Mouse::leftclicked)
 		{

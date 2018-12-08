@@ -33,6 +33,8 @@ int UDP::receiveThread(GameDraw::state * state)
 
 			GameDraw::ID i; texID t; SDL_Rect r; unsigned int s;
 
+			printf("received %s\n", str.c_str());
+
 			// decode recieved data. data format is [ID]_[texID]_[x]_[y]_[w]_[h]_[new objs list size]
 			while (ss >> i >> t >> r.x >> r.y >> r.w >> r.h >> s)
 			{
@@ -43,7 +45,9 @@ int UDP::receiveThread(GameDraw::state * state)
 		else
 		{
 		}
+		printf("4 %i\n", WSAGetLastError());
 	}
+	printf("1 %i\n", WSAGetLastError());
 }
 
 void UDP::init(GameDraw::state * state)
@@ -76,6 +80,8 @@ void UDP::init(GameDraw::state * state)
 void UDP::send(std::string str)
 {
 	sendto(socketC, str.c_str(), str.length(), 0, (sockaddr*)&serverInfo, serverInfoLen);
+
+	printf("3 %i\n", WSAGetLastError());
 }
 
 void UDP::destroy()

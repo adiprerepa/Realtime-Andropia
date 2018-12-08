@@ -41,8 +41,9 @@ void GameDraw::state::draw()
 {
 	for (auto object : objs)
 	{
-		if (object.t == 0) Render::drawRect(object.r, { 255, 0, 0, 255 }); // soon to be replaced with texture
-		if (object.t == 1) Render::drawRect(object.r, { 0, 0, 255, 255 }); // ^
+		if (object.t == 0) Render::drawRect(object.r, { 255, 0, 0, 255 }, true); // soon to be replaced with texture
+		if (object.t == 1) Render::drawRect(object.r, { 0, 0, 255, 255 }, true); // ^
+		if (object.t == 2) Render::drawRect(object.r, { 255, 0, 255, 255 }, true);
 	}
 }
 
