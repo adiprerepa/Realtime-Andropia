@@ -23,7 +23,7 @@ namespace Render
 
 	void drawRect(SDL_Rect rect, Color color);
 
-	void blit(SDL_Texture * tex, SDL_Rect dest);
+	void blit(SDL_Texture * tex, SDL_Rect rect);
 
-	void blitEx(SDL_Texture * tex, SDL_Rect dest, double angle, SDL_Point spincenter);
+	void blitEx(SDL_Texture * tex, SDL_Rect rect, double angle, SDL_Point spincenter);
 };

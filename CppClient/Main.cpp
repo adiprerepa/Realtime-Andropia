@@ -5,15 +5,11 @@
 #include "UDP.h"
 #include "Window.h"
 
-#include <Windows.h>
-
 #pragma comment(lib,"ws2_32.lib")
 #pragma comment (lib, "SDL2/SDL2.lib")
 #pragma comment (lib, "SDL2/SDL2main.lib")
 #pragma comment (lib, "SDL2/SDL2_image.lib")
 #pragma comment (lib, "SDL2/SDL2_ttf.lib")
-
-HWND Stealth = FindWindowA("ConsoleWindowClass", NULL);
 
 GameDraw::state state;
 
@@ -37,35 +33,47 @@ int main()
 
 		if (Input::Key::keypress[KEY_W])
 		{
-			UDP::send("wp");
+			UDP::send("kd w");
 		}
 		if (Input::Key::keypress[KEY_A])
 		{
-			UDP::send("ap");
+			UDP::send("kd a");
 		}
 		if (Input::Key::keypress[KEY_S])
 		{
-			UDP::send("sp");
+			UDP::send("kd s");
 		}
 		if (Input::Key::keypress[KEY_D])
 		{
-			UDP::send("dp");
+			UDP::send("kd d");
 		}
 		if (Input::Key::keyrelease[KEY_W])
 		{
-			UDP::send("wr");
+			UDP::send("ku w");
 		}
 		if (Input::Key::keyrelease[KEY_A])
 		{
-			UDP::send("ar");
+			UDP::send("ku a");
 		}
 		if (Input::Key::keyrelease[KEY_S])
 		{
-			UDP::send("sr");
+			UDP::send("ku s");
 		}
 		if (Input::Key::keyrelease[KEY_D])
 		{
-			UDP::send("dr");
+			UDP::send("ku d");
+		}
+		if (Input::Mouse::leftclicked)
+		{
+			UDP::send("mc " + std::to_string(Input::Mouse::pos.x) + " " + std::to_string(Input::Mouse::pos.y));
+		}
+		if (Input::Mouse::leftclicked)
+		{
+			UDP::send("mlc " + std::to_string(Input::Mouse::pos.x) + " " + std::to_string(Input::Mouse::pos.y));
+		}
+		if (Input::Mouse::leftreleased)
+		{
+			UDP::send("mlr " + std::to_string(Input::Mouse::pos.x) + " " + std::to_string(Input::Mouse::pos.y));
 		}
 
 		capFramerate();
@@ -74,5 +82,4 @@ int main()
 	TextureManager::destroy();
 	Window::destroy();
 	UDP::destroy();
-	ShowWindow(Stealth, 1);
 }

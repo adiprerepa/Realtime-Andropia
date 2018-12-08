@@ -11,6 +11,11 @@
 SDL_Window * WINDOW_WINDOW = nullptr;
 SDL_Renderer * WINDOW_RENDERER = nullptr;
 
+void center(SDL_Rect& rect)
+{
+	rect = { rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h };
+}
+
 SDL_Texture * Render::createTextureFromSurface(SDL_Surface * surface)
 {
 	SDL_Texture * t = SDL_CreateTextureFromSurface(WINDOW_RENDERER, surface);
@@ -21,18 +26,20 @@ SDL_Texture * Render::createTextureFromSurface(SDL_Surface * surface)
 void Render::drawRect(SDL_Rect rect, Color color)
 {
 	SDL_SetRenderDrawColor(WINDOW_RENDERER, color.r, color.g, color.b, color.a);
-
+	center(rect);
 	SDL_RenderFillRect(WINDOW_RENDERER, &rect);
 }
 
-void Render::blit(SDL_Texture * tex, SDL_Rect dest)
+void Render::blit(SDL_Texture * tex, SDL_Rect rect)
 {
-	SDL_RenderCopy(WINDOW_RENDERER, tex, nullptr, &dest);
+	center(rect);
+	SDL_RenderCopy(WINDOW_RENDERER, tex, nullptr, &rect);
 }
 
-void Render::blitEx(SDL_Texture * tex, SDL_Rect dest, double angle, SDL_Point spincenter)
+void Render::blitEx(SDL_Texture * tex, SDL_Rect rect, double angle, SDL_Point spincenter)
 {
-	SDL_RenderCopyEx(WINDOW_RENDERER, tex, nullptr, &dest, angle, &spincenter, SDL_FLIP_NONE);
+	center(rect);
+	SDL_RenderCopyEx(WINDOW_RENDERER, tex, nullptr, &rect, angle, &spincenter, SDL_FLIP_NONE);
 }
 
 int Window::count = 0;

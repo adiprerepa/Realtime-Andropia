@@ -21,7 +21,6 @@ void GameDraw::state::update(ID i, texID t, SDL_Rect r, unsigned int s)
 	}
 	if (objs.size() < i)
 	{
-		printf("ID greater than allocated GameDraw object vector size. Update skipped.");
 		return;
 	}
 
@@ -40,18 +39,10 @@ void GameDraw::state::loadwalls(std::vector<obj> walls)
 // simple enough
 void GameDraw::state::draw()
 {
-	Render::drawRect(objs[0].r, { 255, 0, 0, 255 }); // soon to be replaced with texture
-	Render::drawRect(objs[1].r, { 0, 0, 255, 255 }); // ^
-
-	auto i = objs.begin() + 2;
-	while (i < objs.begin() + 2 + wallcount) // i is in wall-range
+	for (auto object : objs)
 	{
-		Render::drawRect(i->r, WALLCOLOR);
-		++i;
-	}
-	while (i < objs.end()) // i is in dynamic memory obj range
-	{
-		TextureManager::render(i->t, { i->r.x, i->r.y });
+		if (object.t == 0) Render::drawRect(object.r, { 255, 0, 0, 255 }); // soon to be replaced with texture
+		if (object.t == 1) Render::drawRect(object.r, { 0, 0, 255, 255 }); // ^
 	}
 }
 

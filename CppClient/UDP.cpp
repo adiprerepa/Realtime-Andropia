@@ -5,9 +5,8 @@
 
 #include <sstream>
 #include <thread>
-#include <Windows.h>
-#include <Winsock2.h>
 #include <WS2tcpip.h>
+#include <Winsock2.h>
 
 SOCKET socketC;
 struct sockaddr_in serverInfo;
@@ -34,21 +33,15 @@ int UDP::receiveThread(GameDraw::state * state)
 
 			GameDraw::ID i; texID t; SDL_Rect r; unsigned int s;
 
-			// decode recieved data. data format is [ID] [texID] [x] [y] [w] [h] [new objs list size]
-			ss >> i;
-			ss >> t;
-			ss >> r.x;
-			ss >> r.y;
-			ss >> r.w;
-			ss >> r.h;
-			ss >> s;
-
-			// use recieved data
-			state->update(i, t, r, s);
+			// decode recieved data. data format is [ID]_[texID]_[x]_[y]_[w]_[h]_[new objs list size]
+			while (ss >> i >> t >> r.x >> r.y >> r.w >> r.h >> s)
+			{
+				// use recieved data
+				state->update(i, t, r, s);
+			}
 		}
 		else
 		{
-			printf("WSAPOOPY %i\n", WSAGetLastError());
 		}
 	}
 }
@@ -73,6 +66,8 @@ void UDP::init(GameDraw::state * state)
 	serverInfo.sin_port = htons(serverPort);
 	inet_pton(AF_INET, serverIP, &serverInfo.sin_addr.s_addr);
 
+	send("connect");
+
 	// start receive thread
 	thr = std::thread(receiveThread, state);
 	thr.detach();
@@ -80,11 +75,7 @@ void UDP::init(GameDraw::state * state)
 
 void UDP::send(std::string str)
 {
-	char * buffer = (char *)str.c_str();
-	if (sendto(socketC, buffer, strlen(buffer), 0, (sockaddr*)&serverInfo, serverInfoLen) != SOCKET_ERROR)
-	{
-
-	}
+	sendto(socketC, str.c_str(), str.length(), 0, (sockaddr*)&serverInfo, serverInfoLen);
 }
 
 void UDP::destroy()
