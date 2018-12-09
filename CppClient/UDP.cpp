@@ -1,25 +1,45 @@
+#include "GameDraw.h"
+#include "Constants.h"
 #include "UDP.h"
 
-#include "Constants.h"
-#include "GameDraw.h"
-
 #include <sstream>
+#include <string.h>
 #include <thread>
+#if defined _WIN32 || defined _WIN64
 #include <WS2tcpip.h>
 #include <Winsock2.h>
+#elif __APPLE__
+#include "TargetConditionals.h"
+#ifdef TARGET_OS_MAC
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+#elif __linux__
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
 
-SOCKET socketC;
+int socketC;
 struct sockaddr_in serverInfo;
 struct addrinfo *thisResult = NULL;
 struct addrinfo thisHints;
-int serverInfoLen = sizeof(serverInfo);
+socklen_t serverInfoLen = sizeof(serverInfo);
 std::thread thr;
 
 int recvx;
 int recvy;
 
-
-int UDP::receiveThread(GameDraw::state * state)
+void UDP::receiveThreadFunction(GameDraw::state * state)
 {
 	char recv[recvbufsiz];
 	while (1)
@@ -33,8 +53,6 @@ int UDP::receiveThread(GameDraw::state * state)
 
 			GameDraw::ID i; texID t; SDL_Rect r; unsigned int s;
 
-			printf("received %s\n", str.c_str());
-
 			// decode recieved data. data format is [ID]_[texID]_[x]_[y]_[w]_[h]_[new objs list size]
 			while (ss >> i >> t >> r.x >> r.y >> r.w >> r.h >> s)
 			{
@@ -45,18 +63,18 @@ int UDP::receiveThread(GameDraw::state * state)
 		else
 		{
 		}
-		printf("4 %i\n", WSAGetLastError());
 	}
-	printf("1 %i\n", WSAGetLastError());
 }
 
 void UDP::init(GameDraw::state * state)
 {
+#ifdef _WIN32
 	WSADATA wsaData;
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
+#endif
 
 	// sets up client addr, for bind(), and socket()
-	ZeroMemory(&thisHints, sizeof(thisHints));
+	memset(&thisHints, 0, sizeof(thisHints));
 	thisHints.ai_family = AF_INET;
 	thisHints.ai_socktype = SOCK_DGRAM;
 	thisHints.ai_protocol = IPPROTO_UDP;
@@ -73,19 +91,22 @@ void UDP::init(GameDraw::state * state)
 	send("connect");
 
 	// start receive thread
-	thr = std::thread(receiveThread, state);
+	thr = std::thread(receiveThreadFunction);
 	thr.detach();
 }
 
 void UDP::send(std::string str)
 {
 	sendto(socketC, str.c_str(), str.length(), 0, (sockaddr*)&serverInfo, serverInfoLen);
-
-	printf("3 %i\n", WSAGetLastError());
 }
 
 void UDP::destroy()
 {
 	thr.~thread();
+#ifdef _WIN32
 	closesocket(socketC);
+#else
+	close(socketC);
+#endif
 }
+
