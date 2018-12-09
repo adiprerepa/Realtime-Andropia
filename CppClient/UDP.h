@@ -9,7 +9,9 @@ namespace GameDraw
 
 namespace UDP
 {
-	int receiveThread(GameDraw::state * state);
+	void receiveThreadFunction(GameDraw::state * state);
+
+	void verificationPacketThreadFunction();
 
 	void init(GameDraw::state * state);
 
@@ -17,3 +19,4 @@ namespace UDP
 
 	void destroy();
 }
+
