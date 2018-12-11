@@ -12,7 +12,7 @@ Overview :
   
   As of now, the clients only work on Windows with Winsock 2, and use a c++ game engine Cross platform clients will come soon after the 
   engine is replace with nice code. Clients use the C version of SDL. Only certain networks can access our server, so a GUI embedded 
-  in SDL to choose port/IP of server will also be added. We currently have one AWS server.
+  in SDL to choose port/IP of server will also be added. We currently have one AWS server (more to come in the future!)
   
   The game is currently in a very early version in which players control a rectangle with the WSAD keys. 
     
