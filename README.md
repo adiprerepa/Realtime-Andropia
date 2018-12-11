@@ -31,6 +31,6 @@ Things to add :
       - Verification packets sent every n seconds to determine connection status 
           (when a player disconnects, server does not receive packets)
      
-Aditya Prerepa (AWS java networking APIs to pair with c++) 
+Aditya Prerepa (AWS java networking APIs to pair with c++ & server code functionality) 
 Akshay Trivedi (c++ game engine and client functionality) 
 12-8-18
